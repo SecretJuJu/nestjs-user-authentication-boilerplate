@@ -6,7 +6,14 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://localhost/nest'), UserModule],
+  imports: [
+    MongooseModule.forRoot(
+      `mongodb://localhost/${
+        process.env.NODE_ENV === 'test' ? 'test' : 'nest'
+      }`,
+    ),
+    UserModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
