@@ -15,4 +15,12 @@ export class UserService {
     const createdUser = new this.userModel(createUserDto);
     return createdUser.save();
   }
+
+  async findUser(username: string): Promise<User | null> {
+    const findedUser = await this.userModel.findOne({
+      username,
+    });
+
+    return findedUser;
+  }
 }
