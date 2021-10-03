@@ -1,4 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { checkPassword } from 'src/utils/user';
 import { CreateUserDto } from '../user/dtos/create-user.dto';
 import { UserService } from '../user/user.service';
 
@@ -16,5 +21,16 @@ export class AuthService {
 
     const user = await this.usersService.createUser(createUserDto);
     return user.username;
+  }
+
+  async vaildateUser(username: string, password: string) {
+    const user = await this.usersService.findUser(username);
+    if (user && checkPassword(password, user.password)) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...result } = user;
+      return result;
+    }
+
+    return null;
   }
 }
